@@ -17,6 +17,8 @@ DEBUG = env("DJANGO_IS_DEBUG", default=False)
 
 ALLOWED_HOSTS = tuple(allowed_host for allowed_host in env.list('DJANGO_ALLOWED_HOSTS'))
 
+INTERNAL_IPS = tuple(allowed_host for allowed_host in env.list('DJANGO_ALLOWED_HOSTS'))
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,7 +27,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+
+    'shop',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar', 'django_extensions']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -35,6 +44,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -106,8 +116,8 @@ AWS_S3_ENDPOINT_URL = env('MINIO_URL')
 AWS_S3_REGION_NAME = env('MINIO_REGION_NAME')
 AWS_S3_ACCESS_KEY_ID = env('MINIO_ROOT_USER')
 AWS_S3_SECRET_ACCESS_KEY = env('MINIO_ROOT_PASSWORD')
-AWS_STORAGE_BUCKET_NAME = env('MINIO_MEDIA_BACKET_NAME')
-MINIO_STATIC_BACKET_NAME = env('MINIO_STATIC_BACKET_NAME')
+AWS_STORAGE_BUCKET_NAME = env('MINIO_STATIC_BACKET_NAME')
+MINIO_MEDIA_BACKET_NAME = env('MINIO_MEDIA_BACKET_NAME') 
 
 STORAGES = {
     'default': {
@@ -115,7 +125,7 @@ STORAGES = {
         'OPTIONS': {
             'access_key': AWS_S3_ACCESS_KEY_ID,
             'secret_key': AWS_S3_SECRET_ACCESS_KEY,
-            'bucket_name': AWS_STORAGE_BUCKET_NAME,
+            'bucket_name': MINIO_MEDIA_BACKET_NAME,
             'endpoint_url': AWS_S3_ENDPOINT_URL,
             'region_name': AWS_S3_REGION_NAME,
         },
@@ -125,7 +135,7 @@ STORAGES = {
         'OPTIONS': {
             'access_key': AWS_S3_ACCESS_KEY_ID,
             'secret_key': AWS_S3_SECRET_ACCESS_KEY,
-            'bucket_name': MINIO_STATIC_BACKET_NAME,
+            'bucket_name': AWS_STORAGE_BUCKET_NAME,
             'endpoint_url': AWS_S3_ENDPOINT_URL,
             'region_name': AWS_S3_REGION_NAME,
         },
