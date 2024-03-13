@@ -341,6 +341,17 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-object-actions"
+version = "4.2.0"
+description = "A Django app for adding object tools for models in the admin"
+optional = false
+python-versions = ">=3.7,<4.0"
+files = [
+    {file = "django_object_actions-4.2.0-py3-none-any.whl", hash = "sha256:ae0df9984c68a4f42f219a391b71fa0630fe44a2983b39b8064378ebddcff30c"},
+    {file = "django_object_actions-4.2.0.tar.gz", hash = "sha256:e24befedf01b6fcdccbb03c33c0e2c855fd1a88f352a66dc7e2170ba31e80128"},
+]
+
+[[package]]
 name = "django-storages"
 version = "1.14.2"
 description = "Support for many storage backends in Django"
@@ -1039,4 +1050,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.11"
-content-hash = "1f26427a1e2d6a9da34f49b4c9a98baeb80907fd059167034df4f5e6e5116696"
+content-hash = "b2f6b43b2799e51ce133a7fab59030444417b3b581082ab45c1872c87828c3b3"
