@@ -35,14 +35,14 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 line-length = 120
-lint.ignore-init-module-imports = true
+ignore-init-module-imports = true
 src = ["src"]
-lint.select = [
+select = [
     "E", # pycodestyle
     "F", # pyflakes
     "I", # isort
 ]
-lint.ignor = ["F401", "N806"]
+ignor = ["F401", "N806"]
 exclude = [
     ".bzr",
     ".direnv",
