@@ -28,4 +28,5 @@ repos:
   - id: pretty-format-yaml
     args:
     - --autofix
+    - --preserve-quotes
     - --indent=2
