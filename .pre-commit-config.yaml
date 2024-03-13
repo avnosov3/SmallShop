@@ -12,7 +12,7 @@ repos:
   hooks:
   - id: ruff
     args: [--fix, --exit-non-zero-on-fix]
-    exclude: 'migrations|.*config.py|.*main.py|.*settings.py'
+    exclude: migrations|.*config.py|.*main.py|.*settings.py
 
 - repo: https://github.com/psf/black
   rev: 24.2.0
@@ -28,5 +28,4 @@ repos:
   - id: pretty-format-yaml
     args:
     - --autofix
-    - --preserve-quotes
     - --indent=2
