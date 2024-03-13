@@ -5,7 +5,11 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env()
+env = environ.Env(
+    CELERY_WAITING_TIME_BEFORE_NEW_ATTEMPTS=(int),
+    CELERY_RETRY_ATTEMPTS=(int),
+    DJANGO_CACHE_TIME=(int),
+)
 
 environ.Env.read_env(BASE_DIR.parent / ".env")
 
@@ -19,6 +23,12 @@ ALLOWED_HOSTS = tuple(allowed_host for allowed_host in env.list('DJANGO_ALLOWED_
 
 INTERNAL_IPS = tuple(allowed_host for allowed_host in env.list('DJANGO_ALLOWED_HOSTS'))
 
+DJANGO_SUPER_ADMIN = env("DJANGO_SUPER_ADMIN")
+
+DJANGO_SUPER_ADMIN_PASSWORD = env("DJANGO_SUPER_ADMIN_PASSWORD")
+
+DJANGO_SUPER_ADMIN_EMAIL = env("DJANGO_SUPER_ADMIN_EMAIL")
+
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -28,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'drf_yasg',
     'rest_framework',
+    'django_celery_beat',
+    'django_object_actions',
 
     'shop',
 ]
@@ -52,7 +65,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,6 +141,8 @@ STORAGES = {
             'bucket_name': MINIO_MEDIA_BACKET_NAME,
             'endpoint_url': AWS_S3_ENDPOINT_URL,
             'region_name': AWS_S3_REGION_NAME,
+            'url_protocol': 'http:',
+            'custom_domain': 'localhost:9000/media',
         },
     },
     'staticfiles': {
@@ -138,6 +153,82 @@ STORAGES = {
             'bucket_name': AWS_STORAGE_BUCKET_NAME,
             'endpoint_url': AWS_S3_ENDPOINT_URL,
             'region_name': AWS_S3_REGION_NAME,
+            'url_protocol': 'http:',
+            'custom_domain': 'localhost:9000/static',
         },
     },
+}
+
+
+# Cache
+DJANGO_CACHE_TIME = env('DJANGO_CACHE_TIME')
+DEFAULT_CACHE = 'default'
+
+CACHES = {
+    DEFAULT_CACHE: {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': env('DJANGO_DEFAULT_CACHE_URL'),
+    }
+}
+
+# Celery
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RETRY_ATTEMPTS = env("CELERY_RETRY_ATTEMPTS")
+CELERY_WAITING_TIME_BEFORE_NEW_ATTEMPTS = env("CELERY_WAITING_TIME_BEFORE_NEW_ATTEMPTS")
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+
+# Logs
+if DEBUG:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'level': 'DEBUG',
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'loggers': {
+            'django.db.backends': {
+                'handlers': ['console'],
+                'level': 'DEBUG',
+            },
+        },
+    }
+else:
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'formatters': {
+            'verbose': {
+                'format': '{levelname} {asctime} {message}',
+                'style': '{',
+            },
+        },
+        'handlers': {
+            'file': {
+                'level': 'INFO',
+                'class': 'logging.FileHandler',
+                'filename': 'django.log',
+                'formatter': 'verbose',
+            },
+            'console': {
+                'level': 'INFO',
+                'class': 'logging.StreamHandler',
+                'formatter': 'verbose',
+            },
+        },
+        'root': {
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+        },
+    }
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
 }
