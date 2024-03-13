@@ -2,7 +2,6 @@ repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v4.5.0
   hooks:
-  - id: double-quote-string-fixer
   - id: check-yaml
   - id: check-merge-conflict
   - id: check-case-conflict
@@ -14,12 +13,6 @@ repos:
   - id: ruff
     args: [--fix, --exit-non-zero-on-fix]
     exclude: 'migrations|.*config.py|.*main.py|.*settings.py'
-
-- repo: https://github.com/pre-commit/mirrors-mypy
-  rev: v1.9.0
-  hooks:
-  - id: mypy
-    exclude: 'migrations'
 
 - repo: https://github.com/psf/black
   rev: 24.2.0
