@@ -2,7 +2,7 @@
 
 ## Схема БД
 
-[![SmallShop DB](docs/tables.png)](https://github.com/avnosov3/SmallShop)
+[![SmallShop DB](docs/tabels.png)](https://github.com/avnosov3/SmallShop)
 
 ## Запуск проекта
 
