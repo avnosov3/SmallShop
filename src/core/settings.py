@@ -2,6 +2,8 @@ from pathlib import Path
 
 import environ
 
+from shop.apps import ShopConfig
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,13 +58,17 @@ if DEBUG:
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]
 
 ROOT_URLCONF = "core.urls"
 
@@ -165,13 +171,12 @@ STORAGES = {
 
 # Cache
 DJANGO_CACHE_TIME = env("DJANGO_CACHE_TIME")
-DEFAULT_CACHE = "default"
 
 CACHES = {
-    DEFAULT_CACHE: {
+    "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
         "LOCATION": env("DJANGO_DEFAULT_CACHE_URL"),
-    }
+    },
 }
 
 # Celery

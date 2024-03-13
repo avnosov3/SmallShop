@@ -38,19 +38,25 @@ class OrderSerializer(serializers.ModelSerializer):
                 order_products.append(models.OrderProduct(order=order, product=db_product, quantity=quantity))
                 db_products.append(db_product)
                 total_amount += db_product.price * quantity
+
             order.total_amount = total_amount
             order.save()
+
             models.OrderProduct.objects.bulk_create(order_products)
+
             models.Product.objects.bulk_update(db_products, ["available_quantity"])
+
             return order
 
     def validate_products(self, products):
         for product in products:
             db_product = product["product"]
+
             if product["quantity"] > db_product.available_quantity:
                 raise serializers.ValidationError(
                     f"Товара {db_product.name} нет в наличии. На складе осталось {db_product.available_quantity}"
                 )
+
         return products
 
 

@@ -1,10 +1,9 @@
 from django.contrib import admin
-from django.core.cache import caches
+from django.core.cache import cache
 from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django_object_actions import DjangoObjectActions, action
 
-from core.settings import DEFAULT_CACHE
 from shop import models
 from shop.choices import OrderStatusChoices, PaymentStatusChoices
 from shop.tasks import post_order
@@ -31,10 +30,11 @@ class ProductAdmin(DjangoObjectActions, BaseAdmin):
     search_fields = ("name", "content")
 
     @action(label="Очистить кеш товаров")
-    def clear_countries_cache(self, request, queryset):
-        caches[DEFAULT_CACHE].clear()
+    def clear_products_cache(self, request, queryset):
+        cache.clear()
+        self.message_user(request, "Кеш очищен")
 
-    changelist_actions = ("clear_countries_cache",)
+    changelist_actions = ("clear_products_cache",)
 
 
 @admin.register(models.Order)
