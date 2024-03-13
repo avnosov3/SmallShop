@@ -1,17 +1,16 @@
-from django.db import models
 from django.core.validators import MinValueValidator, validate_image_file_extension
+from django.db import models
 
-
-from shop.choices import OrderStatusChoices, PaymentTypeChoices, PaymentStatusChoices
+from shop.choices import OrderStatusChoices, PaymentStatusChoices, PaymentTypeChoices
 
 
 class Product(models.Model):
     name = models.CharField(verbose_name="Название товара", max_length=200, unique=True)
     price = models.DecimalField(
-        verbose_name="Цена товара", 
-        max_digits=19, 
-        decimal_places=2, 
-        validators=[MinValueValidator(0, message='Цена товара не может быть отрицательной')]
+        verbose_name="Цена товара",
+        max_digits=19,
+        decimal_places=2,
+        validators=[MinValueValidator(0, message="Цена товара не может быть отрицательной")],
     )
     content = models.TextField(verbose_name="Описание товара", blank=True, null=True)
     available_quantity = models.PositiveIntegerField(verbose_name="Доступное количество")
@@ -20,7 +19,7 @@ class Product(models.Model):
         upload_to="shop/images/",
         blank=True,
         null=True,
-        validators=[validate_image_file_extension]
+        validators=[validate_image_file_extension],
     )
 
     class Meta:
@@ -28,7 +27,7 @@ class Product(models.Model):
         verbose_name_plural = "Товары"
 
     def __str__(self):
-        return f'Товар: {self.name[:15]}, цена: {self.price}'
+        return f"Товар: {self.name[:15]}, цена: {self.price}"
 
 
 class Order(models.Model):
@@ -36,8 +35,8 @@ class Order(models.Model):
         verbose_name="Итоговая сумма",
         max_digits=19,
         decimal_places=2,
-        validators=[MinValueValidator(0, message='Цена товара не может быть отрицательной')],
-        default=0
+        validators=[MinValueValidator(0, message="Цена товара не может быть отрицательной")],
+        default=0,
     )
     status = models.CharField(
         verbose_name="Статус заказа",
@@ -47,11 +46,7 @@ class Order(models.Model):
     time_created = models.DateTimeField(verbose_name="Время создания заказа", auto_now_add=True)
     time_accepted = models.DateTimeField(verbose_name="Время подтверждения заказа", auto_now=True)
     products = models.ManyToManyField(
-        verbose_name="Товары",
-        to=Product,
-        through='OrderProduct',
-        blank=True,
-        related_name='orders'
+        verbose_name="Товары", to=Product, through="OrderProduct", blank=True, related_name="orders"
     )
 
     class Meta:
@@ -59,8 +54,7 @@ class Order(models.Model):
         verbose_name_plural = "Заказы"
 
     def __str__(self):
-        return f'Заказ: {self.pk}, статус: {self.status}, итоговая сумма: {self.total_amount}'
-
+        return f"Заказ: {self.pk}, статус: {self.status}, итоговая сумма: {self.total_amount}"
 
 
 class Payment(models.Model):
@@ -68,14 +62,14 @@ class Payment(models.Model):
         verbose_name="Заказ",
         to=Order,
         on_delete=models.CASCADE,
-        related_name='payment',
+        related_name="payment",
     )
     total_amount = models.DecimalField(
         verbose_name="Итоговая сумма",
         max_digits=19,
         decimal_places=2,
-        validators=[MinValueValidator(0, message='Цена товара не может быть отрицательной')],
-        default=0
+        validators=[MinValueValidator(0, message="Цена товара не может быть отрицательной")],
+        default=0,
     )
     status = models.CharField(
         verbose_name="Статус оплаты",
@@ -91,9 +85,9 @@ class Payment(models.Model):
     class Meta:
         verbose_name = "Оплата"
         verbose_name_plural = "Оплаты"
-    
+
     def __str__(self):
-        return f'Оплата: {self.pk}, статус: {self.status}, тип: {self.type}'
+        return f"Оплата: {self.pk}, статус: {self.status}, тип: {self.type}"
 
     def save(self, *args, **kwargs):
         if self.order:
@@ -111,4 +105,4 @@ class OrderProduct(models.Model):
         verbose_name_plural = "Товары в заказе"
 
     def __str__(self):
-        return f'Товар: {self.product}, количество: {self.quantity}'
+        return f"Товар: {self.product}, количество: {self.quantity}"
