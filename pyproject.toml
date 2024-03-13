@@ -42,7 +42,7 @@ select = [
     "F", # pyflakes
     "I", # isort
 ]
-ignor = ["F401", "N806"]
+ignore = ["F401", "N806"]
 exclude = [
     ".bzr",
     ".direnv",
