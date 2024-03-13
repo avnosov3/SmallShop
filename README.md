@@ -5,7 +5,13 @@
 [![SmallShop DB](docs/tabels.png)](https://github.com/avnosov3/SmallShop)
 
 ## Запуск проекта
-
+0. Выполните следующие команды
+```
+git clone git@github.com:avnosov3/SmallShop.git
+```
+```
+cd SmallShop
+```
 1. Создайте файл .env. Можно переименовать .env.example в .env
 2. Выполните одну из двух команд
 ```shell
