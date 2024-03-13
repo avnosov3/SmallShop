@@ -4,6 +4,7 @@ from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django_object_actions import DjangoObjectActions, action
 
+from core.settings import DEFAULT_CACHE
 from shop import models
 from shop.choices import OrderStatusChoices, PaymentStatusChoices
 from shop.tasks import post_order
