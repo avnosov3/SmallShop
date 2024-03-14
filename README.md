@@ -13,6 +13,9 @@
 * Gunicorn 21.2.0
 * Django-storages 1.14.2
 * Httpx 0.25.0
+* Nginx 1.25
+* Postges 15.1
+* Minio 2023.11.20
 
 ## Схема БД
 
