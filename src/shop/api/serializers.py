@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db import transaction
 from rest_framework import serializers
 
@@ -45,6 +46,8 @@ class OrderSerializer(serializers.ModelSerializer):
             models.OrderProduct.objects.bulk_create(order_products)
 
             models.Product.objects.bulk_update(db_products, ["available_quantity"])
+
+            cache.clear()
 
             return order
 

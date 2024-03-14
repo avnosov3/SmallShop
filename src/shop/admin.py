@@ -74,6 +74,7 @@ class OrderAdmin(BaseAdmin):
 @admin.register(models.Payment)
 class PaymentAdmin(BaseAdmin):
     list_display = ("id", "order", "status", "type", "total_amount")
+    list_editable = ("status", "type")
     list_filter = ("status", "type")
 
     autocomplete_fields = ("order",)
