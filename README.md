@@ -28,7 +28,7 @@ make downv
 docker compose down -v
 ```
 
-## Пути доступные после запуска проекта
+## Пути, доступные после запуска проекта
 
 1. [Django admin panel](http://localhost/admin/)
 ```
