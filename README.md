@@ -9,8 +9,8 @@
 * DRF 3.14.0
 * Celery 5.3.4
 * Pillow 10.1.0
-* redis 5.0.1
-* gunicorn 21.2.0
+* Redis 5.0.1
+* Gunicorn 21.2.0
 * Django-storages 1.14.2
 * Httpx 0.25.0
 
